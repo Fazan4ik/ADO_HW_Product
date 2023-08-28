@@ -147,18 +147,15 @@ namespace ADO_17._08._2023_1_
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            // Double Click по рядку переліку - ? з яким об'єктом він пов'язаний ?
-            if (sender is ListViewItem item)   // Pattern matching
+            if (sender is ListViewItem item)   
             {
-                // var group = item.Content as DAL.Entity.ProductGroup;
-                // if(group is not null) { }
                 if (item.Content is ProductGroup group)
                 {
                     CrudGroupsWindow dialog = new(group with { });
                     bool? dialogResult = dialog.ShowDialog();
-                    if (dialogResult == false)  // Close
+                    if (dialogResult == false)  
                     {
-                        if (dialog.ProductGroup == null)  // Delete
+                        if (dialog.ProductGroup == null) 
                         {
                             if (MessageBox.Show("Пітверджуєте видалення?", "Дані будут видалені",
                                 MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
@@ -179,7 +176,7 @@ namespace ADO_17._08._2023_1_
                             MessageBox.Show("Дію скасовано");
                         }
                     }
-                    else if (dialogResult == true)  // Save
+                    else if (dialogResult == true)
                     {
                         if (saveProductGroup(dialog.ProductGroup!))
                         {
