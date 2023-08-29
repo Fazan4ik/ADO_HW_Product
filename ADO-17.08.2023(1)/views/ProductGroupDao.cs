@@ -85,7 +85,24 @@ namespace ADO_17._08._2023_1_.views
             command.Parameters[1].Value = DateTime.Now;
 
             command.ExecuteNonQuery();
+        }
 
+        public void Update(ProductGroup productGroup)
+        {
+            using SqlCommand command = new() { Connection = _connection };
+            command.CommandText = @$"UPDATE ProductGroups
+                                     SET Name = @name, Description = @description, Picture = @picture WHERE Id = '{productGroup.Id}'";
+            command.Prepare();
+
+            command.Parameters.Add(new SqlParameter("@name", SqlDbType.NVarChar, 50));
+            command.Parameters.Add(new SqlParameter("@description", SqlDbType.NText));
+            command.Parameters.Add(new SqlParameter("@picture", SqlDbType.NVarChar, 50));
+
+            command.Parameters[0].Value = productGroup.Name;
+            command.Parameters[1].Value = productGroup.Description;
+            command.Parameters[2].Value = productGroup.Picture;
+
+            command.ExecuteNonQuery();
         }
 
     }

@@ -195,20 +195,9 @@ namespace ADO_17._08._2023_1_
         }
         private bool saveProductGroup(ProductGroup group)
         {
-            using SqlCommand cmd = new();
-            cmd.Connection = connection;
-            cmd.CommandText = $@"
-                UPDATE 
-                    ProductGroups 
-                SET 
-                    Name = N'{group.Name}', 
-                    Description = N'{group.Description}', 
-                    Picture = N'{group.Picture}' 
-                WHERE 
-                    Id = '{group.Id}' ";
             try
             {
-                cmd.ExecuteNonQuery();
+                productGroupDao.Update(group); 
                 return true;
             }
             catch (Exception ex)
