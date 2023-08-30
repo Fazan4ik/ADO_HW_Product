@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="450" Width="1000">
+        Title="MainWindow" Height="500" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
         </Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
                 <Button Content="Add" Width="50" x:Name="AddGroupButton" Click="AddGroupButton_Click" DockPanel.Dock="Left" Margin="50 0 0 0"/>
                 <CheckBox x:Name="checkBoxDeleted" Content="Show with deleted products" Margin="50 0 0 0" VerticalAlignment="Center" Click="checkBoxDeleted_Click"/>
             </DockPanel>
-            <ListView ItemsSource="{Binding ProductGroups}" Width="Auto" Height="250" Margin="10 0 10 0">
+            <ListView ItemsSource="{Binding ProductGroups}" Width="Auto" Height="250" Margin="20 0 25 20">
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="ID" DisplayMemberBinding="{Binding Path=Id}" Width="auto"/>
