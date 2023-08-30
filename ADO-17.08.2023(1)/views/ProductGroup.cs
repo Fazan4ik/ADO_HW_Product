@@ -13,5 +13,6 @@ namespace ADO_17._08._2023_1_.views
         public String Name { get; set; } = null!;
         public String Description { get; set; } = null!;
         public String Picture { get; set; } = null!;
+        public string Delete { get; set; }
     }
 }

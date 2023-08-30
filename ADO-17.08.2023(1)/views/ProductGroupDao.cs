@@ -19,31 +19,74 @@ namespace ADO_17._08._2023_1_.views
             _connection = connection;
         }
 
-        public List<ProductGroup> GetAll()
+        public List<ProductGroup> GetWithDelete()
         {
-
-            using SqlCommand command = new SqlCommand();
-            command.Connection = _connection;
-            command.CommandText = "SELECT * FROM ProductGroups WHERE DeleteDt IS NULL";
+            var ProductGroups = new List<ProductGroup>();
             try
             {
-                SqlDataReader reader = command.ExecuteReader();
-                var ProductGroups = new List<ProductGroup>();
-                while (reader.Read())
+                using (SqlCommand command = new SqlCommand())
                 {
-                    ProductGroups.Add(new()
+                    command.Connection = _connection;
+                    command.CommandText = "SELECT * FROM ProductGroups WHERE DeleteDt IS NULL";
+                    using (SqlDataReader reader = command.ExecuteReader())
                     {
-                        Id = reader.GetGuid(0),
-                        Name = reader.GetString(1),
-                        Description = reader.GetString(2),
-                        Picture = reader.GetString(3),
-                    });
+                        while (reader.Read())
+                        {
+                            string deleteValue = reader["DeleteDt"] == DBNull.Value ? "No" : "Yes";
+                            ProductGroups.Add(new ProductGroup
+                            {
+                                Id = reader.GetGuid(0),
+                                Name = reader.GetString(1),
+                                Description = reader.GetString(2),
+                                Picture = reader.GetString(3),
+                                Delete = deleteValue,
+
+                            });
+                        }
+                    }
                 }
                 return ProductGroups;
             }
-            catch { throw; }
-
+            catch
+            {
+                throw;
+            }
         }
+
+        public List<ProductGroup> GetFull()
+        {
+            var ProductGroups = new List<ProductGroup>();
+            try
+            {
+                using (SqlCommand command = new SqlCommand())
+                {
+                    command.Connection = _connection;
+                    command.CommandText = "SELECT * FROM ProductGroups";
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string deleteValue = reader["DeleteDt"] == DBNull.Value ? "No" : "Yes";
+                            ProductGroups.Add(new ProductGroup
+                            {
+                                Id = reader.GetGuid(0),
+                                Name = reader.GetString(1),
+                                Description = reader.GetString(2),
+                                Picture = reader.GetString(3),
+                                Delete = deleteValue,
+
+                            });
+                        }
+                    }
+                }
+                return ProductGroups;
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
 
         public void Add(ProductGroup productGroup)
         {
@@ -83,6 +126,27 @@ namespace ADO_17._08._2023_1_.views
 
             command.Parameters[0].Value = productGroup.Id;
             command.Parameters[1].Value = DateTime.Now;
+
+            command.ExecuteNonQuery();
+        }
+
+        public void Restore(ProductGroup productGroup)
+        {
+            using SqlCommand command = new();
+            command.Connection = _connection;
+            command.CommandText = $@"
+                UPDATE
+                    ProductGroups 
+                SET 
+                    DeleteDt = NULL
+                WHERE 
+                    Id = '{productGroup.Id}' ";
+            command.Prepare();
+            command.Parameters.Add(new SqlParameter("@id", SqlDbType.UniqueIdentifier));
+            command.Parameters.Add(new SqlParameter("@deletedb", SqlDbType.DateTime));
+
+            command.Parameters[0].Value = productGroup.Id;
+            command.Parameters[1].Value = DBNull.Value;
 
             command.ExecuteNonQuery();
         }

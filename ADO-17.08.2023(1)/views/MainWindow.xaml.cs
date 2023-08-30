@@ -46,7 +46,7 @@ namespace ADO_17._08._2023_1_
                 connection = new(App.ConnectionString);
                 connection.Open();
                 productGroupDao = new(connection);
-                LoadGroups();
+                LoadWithDelete();
             }
             catch (SqlException ex)
             {
@@ -55,23 +55,57 @@ namespace ADO_17._08._2023_1_
             }
 
         }
-
-        private void LoadGroups()
+        private void LoadWithDelete()
         {
             try
             {
-                foreach(var group in productGroupDao.GetAll())
+                ProductGroups.Clear();
+                foreach (var group in productGroupDao.GetWithDelete())
                 {
                     ProductGroups.Add(group);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "Query error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(ex.Message, "Load with Delete error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
+        private void LoadFull()
+        {
+            try
+            {
+                ProductGroups.Clear();
+                foreach (var group in productGroupDao.GetFull())
+                {
+                    ProductGroups.Add(group);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Load Full error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
+        private void UpdateAll()
+        {
+            if (checkBoxDeleted.IsChecked ?? false)
+            {
+                LoadFull();
+            }
+            else
+            {
+                LoadWithDelete();
+            }
+        }
+
+        private void checkBoxDeleted_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox)
+            {
+                UpdateAll();
+            }
+        }
 
         private void Window_Closed(object sender, EventArgs e)
         {
@@ -147,29 +181,49 @@ namespace ADO_17._08._2023_1_
 
         private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (sender is ListViewItem item)   
+            if (sender is ListViewItem item)
             {
                 if (item.Content is ProductGroup group)
                 {
                     CrudGroupsWindow dialog = new(group with { });
                     bool? dialogResult = dialog.ShowDialog();
-                    if (dialogResult == false)  
+                    if (dialogResult == false)
                     {
-                        if (dialog.ProductGroup == null) 
+                        if (dialog.ProductGroup == null)
                         {
-                            if (MessageBox.Show("Пітверджуєте видалення?", "Дані будут видалені",
-                                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if(group.Delete == "No")
                             {
-                                if (deleteProductGroup(group))
+                                if (MessageBox.Show("Пітверджуєте видалення?", "Дані будут видалені",
+                                MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 {
-                                    ProductGroups.Remove(group);
-                                    MessageBox.Show("Дані видалено");
-                                }
-                                else
-                                {
-                                    MessageBox.Show("Проблеми з БД. Повторіть дію пізніше");
+                                    if (deleteProductGroup(group))
+                                    {
+                                        ProductGroups.Remove(group);
+                                        MessageBox.Show("Дані видалено");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Проблеми з БД. Повторіть дію пізніше");
+                                    }
                                 }
                             }
+                            else
+                            {
+                                if (MessageBox.Show("Дані вже видалені, хочте їх відновити?", "Дані будуть відновлені",
+                               MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                                {
+                                    if (RestoreProductGroup(group))
+                                    {
+                                        MessageBox.Show("Дані відновлено");
+                                    }
+                                    else
+                                    {
+                                        MessageBox.Show("Проблеми з БД. Повторіть дію пізніше");
+                                    }
+                                }
+                            }
+                            
+
                         }
                         else
                         {
@@ -191,13 +245,14 @@ namespace ADO_17._08._2023_1_
                         }
                     }
                 }
+                UpdateAll();
             }
         }
         private bool saveProductGroup(ProductGroup group)
         {
             try
             {
-                productGroupDao.Update(group); 
+                productGroupDao.Update(group);
                 return true;
             }
             catch (Exception ex)
@@ -211,7 +266,20 @@ namespace ADO_17._08._2023_1_
         {
             try
             {
-                productGroupDao.Delete(group); 
+                productGroupDao.Delete(group);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Title = ex.Message;
+                return false;
+            }
+        }
+        private bool RestoreProductGroup(ProductGroup group)
+        {
+            try
+            {
+                productGroupDao.Restore(group);
                 return true;
             }
             catch (Exception ex)
@@ -233,7 +301,6 @@ namespace ADO_17._08._2023_1_
             bool? dialogResult = dialog.ShowDialog();
             if (dialogResult ?? false)
             {
-    
                 try
                 {
                     productGroupDao.Add(newGroup);
@@ -247,6 +314,8 @@ namespace ADO_17._08._2023_1_
                 }
             }
         }
+
+        
     }
 }
 
