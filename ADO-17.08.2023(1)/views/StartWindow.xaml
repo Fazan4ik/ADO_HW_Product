@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_17._08._2023_1_.views"
         mc:Ignorable="d"
-        Title="StartWindow" Height="450" Width="300">
+        Title="Start Window" Height="450" Width="300">
     <Grid>
         <StackPanel Orientation="Vertical">
             <Label HorizontalAlignment="Center" FontSize="25">

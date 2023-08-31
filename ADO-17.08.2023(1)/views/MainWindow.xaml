@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
-        Title="MainWindow" Height="500" Width="1000">
+        Title="Group" Height="500" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
         </Grid.ColumnDefinitions>

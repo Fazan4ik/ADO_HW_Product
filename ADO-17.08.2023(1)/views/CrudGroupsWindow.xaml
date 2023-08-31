@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ADO_17._08._2023_1_.views"
         mc:Ignorable="d"
-        Title="CrudGroupsWindow" Height="300" Width="400">
+        Title="Edit" Height="300" Width="400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
