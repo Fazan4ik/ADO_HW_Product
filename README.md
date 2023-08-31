@@ -8,8 +8,8 @@
 Тикнув галочку ми бачимо це
 ![image](https://github.com/Fazan4ik/ADO_HW_Product/assets/91279825/36372515-9d97-4d5f-9ddd-c59c4531d179)
 
-Дані відновляются, коли ми тикаємо кнопку Delete
-![image](https://github.com/Fazan4ik/ADO_HW_Product/assets/91279825/84dd14a3-0198-4a52-9b94-2461d4afb679)
+Дані відновляются, коли ми тикаємо кнопку Del/Res
+![image](https://github.com/Fazan4ik/ADO_HW_Product/assets/91279825/401b2bef-8cc2-4197-8d40-20c10afbdfc2)
 
 Програма видає це
 ![image](https://github.com/Fazan4ik/ADO_HW_Product/assets/91279825/934a43eb-3cbc-490e-a144-a5604d348ed6)
