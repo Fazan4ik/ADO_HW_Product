@@ -41,7 +41,7 @@
                     x:Name="CloseButton" Click="CloseButton_Click"/>
             <Button Content="Save" Padding="0 0 0 2" Margin="20 10" 
                     x:Name="SaveButton" Click="SaveButton_Click"/>
-            <Button Content="Delete" Padding="0 0 0 2" Margin="20 10" 
+            <Button Content="Del/Res" Padding="0 0 0 2" Margin="20 10" 
                     x:Name="DeleteButton" Click="DeleteButton_Click"/>
         </UniformGrid>
     </Grid>
